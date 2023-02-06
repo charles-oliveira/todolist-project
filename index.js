@@ -2,6 +2,8 @@ const inputField = document.querySelector('input')
 const pushBtn = document.querySelector('#push')
 const tasks = document.querySelector('#tasks')
 
+document.addEventListener("DOMContentLoaded", getTodos)
+
 
 pushBtn.addEventListener('click', () => {
     if (inputField.value.length == 0) {
@@ -17,6 +19,9 @@ pushBtn.addEventListener('click', () => {
                 </button>
             </div>
        `
+
+       saveToLocalTodos(inputField.value)
+
        const currentTask = document.querySelectorAll('.delete')
         for(let i = 0; i < currentTask.length; i++) {
             currentTask[i].onclick = function() {
@@ -34,3 +39,36 @@ pushBtn.addEventListener('click', () => {
     }
     inputField.value = ''
 })
+
+function saveToLocalTodos(todo) {
+    let todos
+    if (localStorage.getItem('todos') === null) {
+        todos = []
+    } else {
+        todos = JSON.parse(localStorage.getItem('todos'))
+    }
+    todos.push(todo)
+    localStorage.setItem('todos', JSON.stringify(todos))
+}
+
+function getTodos() {
+    let todos
+    if (localStorage.getItem('todos') === null) {
+        todos = []
+    } else {
+        todos = JSON.parse(localStorage.getItem('todos'))
+    }
+    todos.forEach(function (todo) {
+        tasks.innerHTML +=  `
+            <div class="task">
+                <span id="taskName">
+                    ${todo}
+                </span>
+                <button class="delete">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            </div>
+        `
+    })
+}
+
