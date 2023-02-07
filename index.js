@@ -1,4 +1,5 @@
 const inputField = document.querySelector('input');
+const tagField = document.querySelector('input[name="tag"]');
 const pushBtn = document.querySelector('#push');
 const tasksContainer = document.querySelector('#tasks');
 
@@ -10,10 +11,17 @@ pushBtn.addEventListener('click', () => {
     return;
   }
 
-  const task = createTask(inputField.value);
+  const task = createTask({
+    name: inputField.value,
+    tag: tagField.value,
+  });
   tasksContainer.appendChild(task);
-  saveToLocalTodos(inputField.value);
+  saveToLocalTodos({
+    name: inputField.value,
+    tag: tagField.value,
+  });
   inputField.value = '';
+  tagField.value = '';
 });
 
 function getTodos() {
@@ -27,20 +35,25 @@ function saveToLocalTodos(todo) {
   localStorage.setItem('todos', JSON.stringify(todos));
 }
 
-function createTask(taskName) {
+function createTask({ name, tag }) {
   const task = document.createElement('div');
   task.classList.add('task');
 
   const taskText = document.createElement('span');
   taskText.id = 'taskName';
-  taskText.textContent = taskName;
+  taskText.textContent = name;
   task.appendChild(taskText);
+
+  const tagText = document.createElement('span');
+  tagText.id = 'tagName';
+  tagText.textContent = tag;
+  task.appendChild(tagText);
 
   const deleteBtn = document.createElement('button');
   deleteBtn.classList.add('delete');
   deleteBtn.innerHTML = '<i class="fa-regular fa-trash-can"></i>';
   deleteBtn.addEventListener('click', () => {
-    removeFromLocalTodos(taskName);
+    removeFromLocalTodos({ name, tag });
     task.remove();
   });
   task.appendChild(deleteBtn);
@@ -52,9 +65,9 @@ function createTask(taskName) {
   return task;
 }
 
-function removeFromLocalTodos(taskName) {
+function removeFromLocalTodos({ name, tag }) {
   let todos = JSON.parse(localStorage.getItem('todos')) || [];
-  const taskIndex = todos.indexOf(taskName);
+  const taskIndex = todos.findIndex(todo => todo.name === name && todo.tag === tag);
   todos.splice(taskIndex, 1);
   localStorage.setItem('todos', JSON.stringify(todos));
 }
