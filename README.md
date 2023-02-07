@@ -1,4 +1,4 @@
-### To-Do App
+# To-Do App
 
 O To-Do App é uma ferramenta simples e fácil de usar que ajuda você a organizar suas tarefas diárias. Com ele, você pode adicionar, marcar como concluído e excluir tarefas com facilidade. Além disso, é possível adicionar tags às suas tarefas para ajudá-lo a categorizá-las.
 
